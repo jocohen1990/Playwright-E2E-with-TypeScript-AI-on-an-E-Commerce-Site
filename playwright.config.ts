@@ -36,9 +36,19 @@ export default defineConfig({
   projects: [
     {
       name: 'chromium',
+      testIgnore: /auth/,
       use: { 
         ...devices['Desktop Chrome'],
-        storageState: 'playwright/.auth/user.json' 
+       },
+    },
+    // project for files with auth
+    {
+      name: 'auth-files',
+      // match for file with auth:
+      testMatch: /auth/,
+      use: {
+        ...devices['Desktop Chrome'],
+        storageState: 'playwright/.auth/user.json'
       },
       dependencies: ['auth-setup']
     },
@@ -46,7 +56,20 @@ export default defineConfig({
     {
       name: 'auth-setup',
       testMatch: 'auth.setup.ts',
+    },
+
+    {
+      name: 'api',
+      testDir: './tests/api',
+      use: {
+        baseURL: 'https://valentinos-magic-beans.click',
+        extraHTTPHeaders: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
+      }
     }
+    
 
     //{
     //  name: 'firefox',
