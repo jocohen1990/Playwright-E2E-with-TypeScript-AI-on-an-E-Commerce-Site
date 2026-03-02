@@ -16,5 +16,11 @@ COPY . .
 # install Playwright browsers (if not in base image)
 RUN npx playwright install
 
+# Set port environment variable (if needed for your tests)
+ENV port=3000
+
+# Expose the port (if your tests need to access a web server)
+EXPOSE 3000
+
 # default test command
-CMD ["npx", "playwright", "test"]
+CMD ["npm", "start"]
