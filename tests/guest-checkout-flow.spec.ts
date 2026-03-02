@@ -36,19 +36,19 @@ test.describe('Guest Checkout Flow - Brazilian Coffee Order', () => {
     await expect(page).toHaveURL(/\/cart/);
 
     // Step 5: Verify cart contents
-    const cartPage = page.locator('[data-test-id="cart-container"]');
+    const cart = page.locator('[data-test-id="cart-item"]');
 
-await expect(cartPage.getByRole('heading', { name: 'Your Cart' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Your Cart' })).toBeVisible();
 
-await expect(cartPage.getByRole('heading', { name: productName })).toBeVisible();
+    await expect(cart.getByRole('heading', { name: productName })).toBeVisible();
 
-await expect(cartPage.getByText(productPrice)).toBeVisible();
+    await expect(cart.locator('p').filter({ hasText: productPrice }).first()).toBeVisible();
 
-await expect(cartPage.getByText('Subtotal')).toBeVisible();
+    await expect(page.getByText('Subtotal')).toBeVisible();
 
-await expect(cartPage.getByText(shippingCost)).toBeVisible();
+    await expect(page.getByText(shippingCost)).toBeVisible();
 
-await expect(cartPage.getByText(totalPrice)).toBeVisible();
+    await expect(page.getByText(totalPrice)).toBeVisible();
 
     // Step 6: Proceed to checkout
     await page.getByRole('link', { name: 'Proceed to Checkout' }).click();
@@ -73,15 +73,20 @@ await expect(cartPage.getByText(totalPrice)).toBeVisible();
     await page.locator('[data-test-id="checkout-cardcvc-input"]').fill('123');
 
     // Step 10: Verify order summary before placing order
-    await expect(page.getByText(productName)).toBeVisible();
-    await expect(page.getByText('x1')).toBeVisible();
-    await expect(page.getByText(productPrice)).toBeVisible();
-    await expect(page.getByText(totalPrice)).toBeVisible();
+    const orderSummary = page.locator('[data-test-id="order-summary"]');
+    await expect(orderSummary).toBeVisible();
+    await expect(orderSummary.getByText(productName)).toBeVisible();
+    await expect(orderSummary.getByText('x1')).toBeVisible();
+    await expect(orderSummary.getByText('Subtotal')).toBeVisible();
+    await expect(orderSummary.getByText('$28.98')).toBeVisible();
 
     // Step 11: Place order
     const placeOrderButton = page.locator('[data-test-id="place-order-button"]');
+    await page.waitForTimeout(500);
+    await expect(page.locator('[data-test-id="checkout-cardnumber-input"]')).toHaveValue('4242424242424242');
     await expect(placeOrderButton).toBeVisible();
     await placeOrderButton.click();
+    await page.waitForURL(/\/order-confirmation/, { timeout: 10000 });
 
     // Step 12: Verify order confirmation
     await expect(page).toHaveURL(/\/order-confirmation/);
