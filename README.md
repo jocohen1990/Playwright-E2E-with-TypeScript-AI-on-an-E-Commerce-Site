@@ -1,21 +1,21 @@
 # Valentino Magic Beans
 
 This repository contains end-to-end and API tests for the Valentino Magic Beans web
-application. The test suite is implemented using [Playwright](https://playwright.dev/)
+application, a test application created by Valentin Despa and Alex Dan in order to help us students learn Playwright and TypeScript on their Udemy course, Playwright E2E Testing with AI for Beginners - Zero to Hero. The test suite is implemented using [Playwright](https://playwright.dev/)
 with TypeScript and is designed to be run both locally and on GitHub Actions.
 
 ## Key Features
 
-- Playwright tests organized into several suites: basic, API, setup, utils, and UI flows.
+- Playwright tests are organized into several suites: basic, API, setup, utils, and UI flows.
 - Page object models located under `tests/pages` for reusability.
 - Custom utilities such as `EmailUtils` to support common operations.
 - Test setup files under `tests/setup` for authentication workflows.
-- API tests under `tests/api` including e2e and service-specific specs.
+- API tests under `tests/api`, including e2e and service-specific specs.
 
 ## Playwright MCP & GitHub Copilot
 
 A portion of the test code was generated using Playwright MCP and GitHub
-CoPilot. Specifically, a GitHub CoPilot generated test file was used as a
+CoPilot. Specifically, a GitHub CoPilot-generated test file was used as a
 starting point and refined to meet project needs.
 
 ## Docker & GitHub Actions
