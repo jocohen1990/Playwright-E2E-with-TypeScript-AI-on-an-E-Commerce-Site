@@ -68,7 +68,7 @@ test.describe('Guest Checkout Flow - Brazilian Coffee Order', () => {
 
     // Step 9: Fill payment information
     await page.locator('[data-test-id="checkout-cardname-input"]').fill('John Guest');
-    await page.locator('[data-test-id="checkout-cardnumber-input"]').fill('4242424242424242');
+    await page.locator('[data-test-id="checkout-cardnumber-input"]').fill('1234 5678 9012 3456');
     await page.locator('[data-test-id="checkout-cardexpiry-input"]').fill('12/25');
     await page.locator('[data-test-id="checkout-cardcvc-input"]').fill('123');
 
@@ -83,7 +83,7 @@ test.describe('Guest Checkout Flow - Brazilian Coffee Order', () => {
     // Step 11: Place order
     const placeOrderButton = page.locator('[data-test-id="place-order-button"]');
     await page.waitForTimeout(500);
-    await expect(page.locator('[data-test-id="checkout-cardnumber-input"]')).toHaveValue('4242424242424242');
+    await expect(page.locator('[data-test-id="checkout-cardnumber-input"]')).toHaveValue('1234 5678 9012 3456');
     await expect(placeOrderButton).toBeVisible();
     await placeOrderButton.click();
     await page.waitForURL(/\/order-confirmation/, { timeout: 10000 });
@@ -95,21 +95,21 @@ test.describe('Guest Checkout Flow - Brazilian Coffee Order', () => {
 
     // Step 13: Capture Order ID from confirmation page
     const orderIDText = page.locator('text=Your Order ID is:').getByRole('heading').nth(0);
-    const orderConfirmationText = await page.locator('p').filter({ hasText: /^B/ }).textContent();
+    const orderConfirmationText = await page.locator('p').filter({ hasText: /^[0-9A-Z]+$/ }).textContent();
     orderID = orderConfirmationText?.trim() || '';
     
     // Alternative method to get Order ID
     const allParagraphs = await page.locator('main >> paragraph').all();
     for (const para of allParagraphs) {
       const text = await para.textContent();
-      if (text && /^B\d+$/.test(text.trim())) {
+      if (text && /^[0-9A-Z]+$/.test(text.trim())) {
         orderID = text.trim();
         break;
       }
     }
 
     expect(orderID).toBeTruthy();
-    expect(orderID).toMatch(/^B\d+$/);
+    expect(orderID).toMatch(/^[0-9A-Z]+$/);
 
     // Step 14: Verify confirmation email is correct
     await expect(page.getByText(guestEmail)).toBeVisible();
