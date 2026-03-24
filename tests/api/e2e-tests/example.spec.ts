@@ -21,7 +21,8 @@ test('has title', async ({ page }) => {
     const response = await page.goto('https://valentinos-magic-beans.click/');
 
     // Check if the response status is 200 OK
-    expect(response.status()).toBe(200);   
+    expect(response).not.toBeNull();
+    expect(response!.status()).toBe(200);   
 
     await page.goto('https://playwright.dev/');
 
@@ -47,4 +48,5 @@ test('API test example', async ({ request }) => {
     expect(responseBody).toHaveProperty('data');
     expect(Array.isArray(responseBody.data)).toBe(true);
     expect(responseBody.data.length).toBeGreaterThan(0);
+    }); 
 });

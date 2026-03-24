@@ -5,11 +5,16 @@ import * as loginPage from '../pages/Login'
 
 const authSessionFile = path.resolve(__dirname, '../../playwright/.auth/user.json');
 
-// Read and parse the JSON file
-const loginDataFile = path.resolve(__dirname, '../../playwright/.auth/loginData.json');
-const loginData = JSON.parse(fs.readFileSync(loginDataFile, 'utf-8')) as {
-    email: string,
-    pass: string
+// Ensure the .auth directory exists
+const authDir = path.dirname(authSessionFile);
+if (!fs.existsSync(authDir)) {
+    fs.mkdirSync(authDir, { recursive: true });
+}
+
+// Use credentials from the Login page module
+const loginData = {
+    email: loginPage.TEST_EMAIL,
+    pass: loginPage.TEST_PASSWORD
 }
 
 test('authenticate', async ({ page }) => { 

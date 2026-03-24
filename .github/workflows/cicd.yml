@@ -27,6 +27,8 @@ jobs:
           npx playwright test tests/api/** tests/utils/**
         env:
           CI: true
+          LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
 
       # optionally upload Playwright report if needed
       - name: Archive Playwright report
