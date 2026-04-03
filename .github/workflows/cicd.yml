@@ -7,24 +7,61 @@ on:
     branches: [main, master]
 
 jobs:
-  test:
+
+  api-tests:
     # run inside a Docker container based on the official Node image
+    name: API Tests
     runs-on: ubuntu-latest
+    timeout-minutes: 10
+
     container:
-      image: mcr.microsoft.com/playwright:v1.36.2-focal
+      image: mcr.microsoft.com/playwright:v1.42.1-jammy
     # matrix not needed when using fixed container image
+    
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Run API and utils tests
+      - name: Run API tests
         run: |
-          npx playwright install --with-deps
-          # run only spec files under tests/api and tests/utils
-          npx playwright test tests/api/** tests/utils/**
+          # run only spec files under tests/api 
+          npx playwright test tests/api/**
+        env:
+          CI: true
+          LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
+          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
+
+  ui-tests:
+    name: UI Tests
+    runs-on: ubuntu-latest
+
+    container:
+      image: mcr.microsoft.com/playwright:v1.42.1-jammy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: 'npm'
+    
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run UI tests
+        run: |
+          # run only spec files under tests/ui 
+          npx playwright test tests/ui/**
         env:
           CI: true
           LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
@@ -35,5 +72,5 @@ jobs:
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: playwright-report
+          name: playwright--ui-report
           path: playwright-report/
