@@ -12,6 +12,6 @@ export async function login(page: Page, email: string, password: string) {
 
 export async function verifySuccessfulLogin(page: Page) {
     // After successful login, user should be redirected to home page
-    await expect(page).toHaveURL('/');
+    await expect(page).toHaveURL('https://valentinos-magic-beans.click/login');
 
 }

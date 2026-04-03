@@ -10,3 +10,4 @@ node_modules/
 .vscode/
 .playwright/.auth
 .guest-checkout-flow.spec.ts
+.example.spec.ts

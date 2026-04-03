@@ -62,7 +62,7 @@ export default defineConfig({
       name: 'api',
       testDir: './tests/api',
       use: {
-        baseURL: 'https://valentinos-magic-beans.click',
+        baseURL: 'https://api.valentinos-magic-beans.click',
         extraHTTPHeaders: {
           'Accept': 'application/json',
           'Content-Type': 'application/json'

@@ -2,9 +2,12 @@ import { test, expect } from '@playwright/test';
 
 test('browse products and create order', async ({ request }) => {
   // Step 1: Get all products
-  const productsResponse = await request.get('/products');
+  const productsResponse = await request.get('https://api.valentinos-magic-beans.click/products');
   expect(productsResponse.status()).toBe(200);
   
+  //const contentType = productsResponse.headers()['content-type'];
+  //console.log('Content-Type:', contentType);
+  //expect(contentType).toContain('application/json');
   const productsBody = await productsResponse.json();
   expect(productsBody.success).toBe(true);
   expect(Array.isArray(productsBody.data)).toBe(true);
@@ -36,7 +39,7 @@ test('browse products and create order', async ({ request }) => {
     ]
   };
   
-  const orderResponse = await request.post('/orders', {
+  const orderResponse = await request.post('https://api.valentinos-magic-beans.click/orders', {
     data: orderPayload
   });
     
