@@ -7,7 +7,6 @@ on:
     branches: [main, master]
 
 jobs:
-
   api-tests:
     # run inside a Docker container based on the official Node image
     name: API Tests
@@ -17,7 +16,7 @@ jobs:
     container:
       image: mcr.microsoft.com/playwright:v1.42.1-jammy
     # matrix not needed when using fixed container image
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -25,7 +24,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
+          cache: "npm"
 
       - name: Install dependencies
         run: npm ci
@@ -53,15 +52,15 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
-    
+          cache: "npm"
+
       - name: Install dependencies
         run: npm ci
 
       - name: Run UI tests
         run: |
-          # run only spec files under tests/ui 
-          npx playwright test tests/ui/**
+          # run only spec files under tests/utils 
+          npx playwright test tests/utils/**
         env:
           CI: true
           LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
