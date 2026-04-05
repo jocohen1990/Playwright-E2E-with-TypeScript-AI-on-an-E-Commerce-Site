@@ -2,7 +2,7 @@ import { test } from '@playwright/test';
 import { EmailUtils } from './utils/EmailUtils'
 import * as signUpPage from './pages/SignUp'
 import * as loginPage from './pages/Login'
-import { join, resolve } from 'path'
+import { dirname, join, resolve } from 'path'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 
 const testSignUp = process.env.SIGN_UP_FLOW
