@@ -10,7 +10,7 @@ test('test authentication', async ({ page }) => {
     await expect(navButton).toBeVisible();
     await navButton.click();
 
-    await expect(page.getByText('Welcome!')).toBeVisible();
+    await expect(page.getByText('Welcome back!')).toBeVisible();
 
 });
 
