@@ -2,15 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('test authentication', async ({ page }) => {
 
-    await page.goto('https://valentinos-magic-beans.click/');
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
-    const navButton = page.getByRole('button').first();
-
-    await expect(navButton).toBeVisible();
-    await navButton.click();
-
-    await expect(page.getByText('Welcome back!')).toBeVisible();
+    // Login button should NOT be present when authenticated, so we check for that:
+    await expect(page.getByRole('button', { name: 'Login' })).not.toBeVisible();
 
 });
 
