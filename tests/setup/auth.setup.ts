@@ -17,6 +17,9 @@ const loginData = {
     pass: loginPage.TEST_PASSWORD
 }
 
+// // console.log('EMAIL:', loginData.email);
+// // console.log('PASS:', loginData.pass);
+
 test('authenticate', async ({ page }) => { 
     await page.goto('/login')
 
