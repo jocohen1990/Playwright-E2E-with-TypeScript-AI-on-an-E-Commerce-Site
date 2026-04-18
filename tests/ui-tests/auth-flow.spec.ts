@@ -1,7 +1,7 @@
 import { test } from '@playwright/test';
-import { EmailUtils } from './utils/EmailUtils'
-import * as signUpPage from './pages/SignUp'
-import * as loginPage from './pages/Login'
+import { EmailUtils } from '../../utils/EmailUtils'
+import * as signUpPage from '../pages/SignUp'
+import * as loginPage from '../pages/Login'
 import { dirname, join, resolve } from 'path'
 import { writeFileSync, existsSync, mkdirSync } from 'fs'
 
