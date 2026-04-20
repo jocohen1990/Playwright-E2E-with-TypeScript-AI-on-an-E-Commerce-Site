@@ -28,7 +28,7 @@ test.describe('Guest Checkout Flow - Brazilian Coffee Order', () => {
     // Verify product was added to cart (check notification)
     const cartNotification = page.getByText('Added to Cart');
     await expect(cartNotification).toBeVisible({ timeout: 5000 });
-    await expect(page.getByText('Brazilian Santos is now in your cart')).toBeVisible({ timeout: 5000 });
+    await expect(page.locator('div.text-sm.opacity-90', { hasText: 'Brazilian Santos is now in your cart' })).toBeVisible({ timeout: 5000 });
 
     // Step 4: Navigate to cart
     const cartButton = page.locator('[data-test-id="header-cart-button"]');

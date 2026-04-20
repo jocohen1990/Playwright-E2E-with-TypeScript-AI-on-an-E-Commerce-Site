@@ -87,9 +87,7 @@ jobs:
 
       - name: Run E2E tests
         run: |
-          # run only spec files under tests/e2e-tests
-          npx playwright test tests/e2e-tests/**
-          npx playwright test --project=auth-setup --project=auth-files --project=chromium
+          npx playwright test --project=chromium
         env:
           CI: true
           LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
