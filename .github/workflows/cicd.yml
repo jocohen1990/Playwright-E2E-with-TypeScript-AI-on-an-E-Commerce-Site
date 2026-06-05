@@ -19,11 +19,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           cache: "npm"
 
       - name: Install dependencies
@@ -47,11 +47,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           cache: "npm"
 
       - name: Install dependencies
@@ -59,7 +59,7 @@ jobs:
 
       - name: Run UI tests
         run: |
-          # run only spec files under tests/ui-test
+          # run only spec files under tests/ui-tests
           npx playwright test tests/ui-tests/**
         env:
           CI: true
@@ -75,11 +75,11 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
-          node-version: 18
+          node-version: 24
           cache: "npm"
 
       - name: Install dependencies
@@ -96,7 +96,7 @@ jobs:
       # optionally upload Playwright report if needed
       - name: Archive Playwright report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: playwright--ui-report
           path: playwright-report/
