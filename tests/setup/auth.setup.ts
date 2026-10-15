@@ -1,37 +1,13 @@
-import path from 'path';
-import fs from 'fs';
-import { test } from '@playwright/test';
-import * as loginPage from '../pages/Login'
+import { test as setup, expect } from '../fixtures';
+import { AUTH_STATE_FILE, requireEnv } from '../../utils/env';
 
-const authSessionFile = path.resolve(__dirname, '../../playwright/.auth/user.json');
+setup('log in and save the session', async ({ page, loginPage, header }) => {
+    await loginPage.goto();
+    await loginPage.login(requireEnv('LOGIN_EMAIL'), requireEnv('LOGIN_PASS'));
 
-// Ensure the .auth directory exists
-const authDir = path.dirname(authSessionFile);
-if (!fs.existsSync(authDir)) {
-    fs.mkdirSync(authDir, { recursive: true });
-}
+    await expect(page).toHaveURL('/');
+    await expect(header.loginButton).toBeHidden();
 
-// Use credentials from the Login page module
-const loginData = {
-    email: loginPage.TEST_EMAIL,
-    pass: loginPage.TEST_PASSWORD
-}
-
-// // console.log('EMAIL:', loginData.email);
-// // console.log('PASS:', loginData.pass);
-
-test('authenticate', async ({ page }) => { 
-    await page.goto('/login')
-
-    await loginPage.login(
-        page,
-        loginData.email,
-        loginData.pass
-    )
-    await loginPage.verifySuccessfulLogin(page)
-
-    await page.context().storageState({
-        path: authSessionFile
-    })
-  
-})
+    // storageState creates the parent folder if it does not exist.
+    await page.context().storageState({ path: AUTH_STATE_FILE });
+});

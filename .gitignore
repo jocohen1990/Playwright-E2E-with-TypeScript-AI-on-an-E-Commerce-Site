@@ -1,12 +1,15 @@
-
-# Playwright
+# Dependencies
 node_modules/
+
+# Playwright output
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Saved login sessions and credentials
 /playwright/.auth/
+
+# Local environment
 .env
 .vscode/
-.playwright/.auth
-.example.spec.ts

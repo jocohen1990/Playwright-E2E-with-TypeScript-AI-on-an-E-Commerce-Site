@@ -1,18 +1,26 @@
 {
   "name": "valentino-magic-beans",
   "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
+  "private": true,
+  "description": "Playwright + TypeScript UI, API and E2E test automation for the Valentino's Magic Beans demo e-commerce site.",
+  "author": "Joshua",
   "license": "ISC",
-  "description": "",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:api": "playwright test --project=api",
+    "test:ui": "playwright test --project=chromium --project=chromium-auth tests/ui tests/network",
+    "test:e2e": "playwright test --project=chromium tests/e2e",
+    "typecheck": "tsc --noEmit",
+    "report": "playwright show-report"
+  },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
     "@types/node": "^25.5.2",
-    "dotenv": "^17.4.1"
-  },
-  "dependencies": {
-    "mailslurp-client": "^16.0.0"
+    "dotenv": "^17.4.1",
+    "mailslurp-client": "^16.0.0",
+    "typescript": "~5.9.3"
   }
 }

@@ -2,101 +2,56 @@ name: CI
 
 on:
   push:
-    branches: [main, master]
+    branches: [main]
   pull_request:
-    branches: [main, master]
+    branches: [main]
+
+env:
+  CI: true
 
 jobs:
-  api-tests:
-    # run inside a Docker container based on the official Node image
-    name: API Tests
+  typecheck:
+    name: Type Check
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-jammy
-    # matrix not needed when using fixed container image
-
+    timeout-minutes: 5
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: "npm"
+          cache: npm
+      - run: npm ci
+      - run: npm run typecheck
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run API tests
-        run: |
-          # run only spec files under tests/api-tests
-          npx playwright test tests/api-tests/**
-        env:
-          CI: true
-          LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-
-  ui-tests:
-    name: UI Tests
+  test:
+    name: ${{ matrix.suite }} tests
+    needs: typecheck
     runs-on: ubuntu-latest
-
+    timeout-minutes: 15
+    # Official Playwright image: browsers and OS deps are preinstalled.
+    # Keep the tag in sync with @playwright/test in package.json.
     container:
       image: mcr.microsoft.com/playwright:v1.58.2-jammy
-
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [api, ui, e2e]
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
+      - uses: actions/checkout@v6
       - uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run UI tests
-        run: |
-          # run only spec files under tests/ui-tests
-          npx playwright test tests/ui-tests/**
+          cache: npm
+      - run: npm ci
+      - name: Run ${{ matrix.suite }} tests
+        run: npm run test:${{ matrix.suite }}
         env:
-          CI: true
           LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
           LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-
-  e2e-tests:
-    name: E2E Tests
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    container:
-      image: mcr.microsoft.com/playwright:v1.58.2-jammy
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 24
-          cache: "npm"
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Run E2E tests
-        run: |
-          npx playwright test --project=chromium
-        env:
-          CI: true
-          LOGIN_EMAIL: ${{ secrets.LOGIN_EMAIL }}
-          LOGIN_PASS: ${{ secrets.LOGIN_PASS }}
-
-      # optionally upload Playwright report if needed
-      - name: Archive Playwright report
-        if: always()
+      - name: Upload Playwright report
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v6
         with:
-          name: playwright--ui-report
+          name: playwright-report-${{ matrix.suite }}
           path: playwright-report/
+          retention-days: 14
